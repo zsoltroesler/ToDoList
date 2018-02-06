@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context="com.example.android.todolist.SettingsActivity">
+
+    <fragment
+        android:id="@+id/activity_settings"
+        android:name="com.example.android.todolist.SettingsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_set_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/items_inbetween_space">
+
+            <TextView
+                android:id="@+id/tv_reminder_time_label"
+                style="@style/settings_sub_header"
+                android:textSize="@dimen/large_text"
+                android:text="Set Notification Time" />
+
+            <ImageView
+                android:id="@+id/iv_timer"
+                android:layout_width="@dimen/timer_icon"
+                android:layout_height="@dimen/timer_icon"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_access_time_24dp" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_display_time"
+            style="@style/settings_details"
+            android:paddingTop="@dimen/items_top_padding"
+            android:paddingBottom="@dimen/items_inbetween_space"
+            android:text="17:00" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">To-Do List</string>
+    <string name="main_activity_name">All Tasks</string>
+    <string name="settings_activity">Settings</string>
+    <string name="add_task_activity_name">Add a New Task</string>
+
+    <!-- Strings for MainActivity -->
+    <string name="priority_1">1</string>
+    <string name="priority_2">2</string>
+    <string name="priority_3">3</string>
+
+    <!-- Strings for AddTaskActivity -->
+    <!-- This edit task has a unicode character for "..." = "&#8230;" -->
+    <string name="edit_task_description">Describe your task&#8230;</string>
+    <string name="priority_string">Priority</string>
+
+    <string name="high_priority">High</string>
+    <string name="med_priority">Medium</string>
+    <string name="low_priority">Low</string>
+
+    <string name="add_button">Add</string>
+
+    <!-- Strings for Notifications -->
+    <string name="todo_reminder_notification_title">To-Do List</string>
+    <string name="todo_reminder_notification_body">You have something to do for today!</string>
+    <string name="main_notification_channel_name">Primary</string>
+
+    <!-- Strings for the "order by" preference -->
+    <string name="pref_label_order">Order by</string>
+    <string name="pref_key_order" translatable="false">order_by</string>
+    <string name="pref_default_order" translatable="false">@string/pref_value_priority</string>
+
+    <!-- Label for priority option in the "order by" preference -->
+    <string name="pref_label_priority">The highest priority first</string>
+    <!-- Label for chronological order option in the "order by" preference -->
+    <string name="pref_label_chronological">The oldest first</string>
+
+    <!-- Value in SharedPreferences for priority "order by" option -->
+    <string name="pref_value_priority" translatable="false">priority</string>
+    <!-- Value in SharedPreferences for chronological order "order by" option -->
+    <string name="pref_value_chronological" translatable="false">oldest</string>
+
+    <!-- Strings for the "notification" preference -->
+    <string name="pref_label_notification">Reminder Notification</string>
+    <string name="pref_key_notification" translatable="false">notification</string>
+
+</resources>

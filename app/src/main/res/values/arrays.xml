@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_label_options">
+        <item>@string/pref_label_priority</item>
+        <item>@string/pref_label_chronological</item>
+    </string-array>
+
+    <string-array name="pref_value_options">
+        <item>@string/pref_value_priority</item>
+        <item>@string/pref_value_chronological</item>
+    </string-array>
+
+</resources>
