@@ -24,8 +24,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     private TextView tv;
 
-    //private static String TAG = "RemindMe";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         boolean notification = sharedPreferences.getBoolean(getString(R.string.pref_key_notification), getResources().getBoolean(R.bool.notification_by_default));
-        if (notification == true) {
+        if (notification) {
             ll.setVisibility(View.VISIBLE);
 
             //Use the current time as the default values for the time picker dialog

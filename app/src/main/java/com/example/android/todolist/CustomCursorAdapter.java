@@ -16,9 +16,12 @@
 
 package com.example.android.todolist;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -98,6 +101,27 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         int priorityColor = getPriorityColor(priority);
         priorityCircle.setColor(priorityColor);
 
+        // Attach an OnClickListener to open a current article specific URL
+        holder.parentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                // Create new intent to go to {@link DetailsActivity}
+                Intent intent = new Intent(mContext, AddTaskActivity.class);
+
+                // Form the content URI that represents the specific product that was clicked on,
+                // by appending the "id" (passed as input to this method) onto the
+                // {@link ProductEntry#CONTENT_URI}.
+                // For example, the URI would be "content://com.example.android.inventoryapp/products/2"
+                // if the product with ID 2 was clicked on.
+                Uri currentTaskUri = ContentUris.withAppendedId(TaskContract.TaskEntry.CONTENT_URI, id);
+
+                // Set the URI on the data field of the intent
+                intent.setData(currentTaskUri);
+
+                // Launch the {@link DetailsActivity} to display the data for the current product.
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     /*
@@ -154,9 +178,9 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
         // Class variables for the task description and priority TextViews
-        TextView taskDescriptionView;
-        TextView priorityView;
-
+        private TextView taskDescriptionView;
+        private TextView priorityView;
+        private View parentView;
         /**
          * Constructor for the TaskViewHolders.
          *
@@ -164,9 +188,9 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
          */
         public TaskViewHolder(View itemView) {
             super(itemView);
-
-            taskDescriptionView = (TextView) itemView.findViewById(R.id.taskDescription);
-            priorityView = (TextView) itemView.findViewById(R.id.priorityTextView);
+            this.parentView = itemView;
+            this.taskDescriptionView = (TextView) itemView.findViewById(R.id.taskDescription);
+            this.priorityView = (TextView) itemView.findViewById(R.id.priorityTextView);
         }
     }
 }

@@ -3,6 +3,7 @@
     <string name="main_activity_name">All Tasks</string>
     <string name="settings_activity">Settings</string>
     <string name="add_task_activity_name">Add a New Task</string>
+    <string name="update_task_activity_name">Update the Task</string>
 
     <!-- Strings for MainActivity -->
     <string name="priority_1">1</string>
@@ -19,6 +20,12 @@
     <string name="low_priority">Low</string>
 
     <string name="add_button">Add</string>
+    <string name="update_button">Update</string>
+
+    <!-- Toast message -->
+    <string name="task_message">You forgot to describe the task.</string>
+    <string name="task_added">New task added to the list.</string>
+    <string name="task_updated">Task updated.</string>
 
     <!-- Strings for Notifications -->
     <string name="todo_reminder_notification_title">To-Do List</string>
