@@ -141,20 +141,12 @@ public class TaskContentProvider extends ContentProvider {
                         sortOrder);
                 break;
 
+            // Query for single task
             case TASK_WITH_ID:
-                // For the PRODUCT_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.inventoryapp/products/3",
-                // the selection will be "_id=?" and the selection argument will be a
-                // String array containing the actual ID of 3 in this case.
-                //
-                // For every "?" in the selection, we need to have an element in the selection
-                // arguments that will fill in the "?". Since we have 1 question mark in the
-                // selection, we have 1 String in the selection arguments' String array.
                 selection = TaskContract.TaskEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                // This will perform a query on the products table where the _id equals 3 to return a
-                // Cursor containing that row of the table.
+                // Return Cursor containing that row of the table, which was queried
                 retCursor = db.query(TaskContract.TaskEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
