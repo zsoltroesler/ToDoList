@@ -105,20 +105,16 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                // Create new intent to go to {@link DetailsActivity}
+                // Create new intent to go to {@link AddTaskActivity}
                 Intent intent = new Intent(mContext, AddTaskActivity.class);
 
                 // Form the content URI that represents the specific product that was clicked on,
-                // by appending the "id" (passed as input to this method) onto the
-                // {@link ProductEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.inventoryapp/products/2"
-                // if the product with ID 2 was clicked on.
                 Uri currentTaskUri = ContentUris.withAppendedId(TaskContract.TaskEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
                 intent.setData(currentTaskUri);
 
-                // Launch the {@link DetailsActivity} to display the data for the current product.
+                // Launch the activity to display the data for the current task.
                 mContext.startActivity(intent);
             }
         });

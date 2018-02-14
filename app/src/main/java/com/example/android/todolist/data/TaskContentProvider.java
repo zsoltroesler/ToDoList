@@ -198,8 +198,6 @@ public class TaskContentProvider extends ContentProvider {
         return tasksDeleted;
     }
 
-
-    // Update won't be used in the final ToDoList app but is implemented here for completeness
     // This updates a single item (by it's ID) in the tasks directory
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
