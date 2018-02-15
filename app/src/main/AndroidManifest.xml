@@ -42,7 +42,12 @@
             android:exported="false" />
 
         <!-- Register the NotificationUtils -->
-        <receiver android:name=".utilities.NotificationUtils"></receiver>
+        <receiver android:name=".utilities.NotificationUtils"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".SettingsActivity"
             android:label="@string/settings_activity"

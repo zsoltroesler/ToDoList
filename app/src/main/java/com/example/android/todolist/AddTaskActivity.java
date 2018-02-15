@@ -63,7 +63,7 @@ public class AddTaskActivity extends AppCompatActivity implements
         mButton = (Button) findViewById(R.id.addButton);
 
         // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new product or editing an existing one.
+        // in order to figure out if we're creating a new task or editing an existing one.
         mTaskUri = getIntent().getData();
 
         // If the intent does not contain a task content URI, then we know that we are
@@ -80,7 +80,7 @@ public class AddTaskActivity extends AppCompatActivity implements
             setTitle(getString(R.string.update_task_activity_name));
             mButton.setText(R.string.update_button);
 
-            // Initialize a loader to read the product data from the database
+            // Initialize a loader to read the task data from the database
             // and display the current values in the editor
             getSupportLoaderManager().initLoader(EXISTING_TASK_LOADER, null, this);
         }
