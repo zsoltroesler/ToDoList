@@ -15,8 +15,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- The manifest entry for the MainActivity -->
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,20 +25,10 @@
 
         <!-- AddTaskActivity -->
         <activity
-            android:name=".AddTaskActivity"
+            android:name=".ui.add.AddTaskActivity"
             android:label="@string/add_task_activity_name"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.todolist.MainActivity" />
+            android:parentActivityName=".ui.main.MainActivity">
         </activity>
-        <!-- Register the TaskContentProvider -->
-        <!-- Set name, authorities, and exported attributes -->
-        <!-- exported = false limits access to this ContentProvider to only this app -->
-        <provider
-            android:name=".data.TaskContentProvider"
-            android:authorities="com.example.android.todolist"
-            android:exported="false" />
 
         <!-- Register the NotificationUtils -->
         <receiver android:name=".utilities.NotificationUtils"
@@ -49,13 +38,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".settings.SettingsActivity"
             android:label="@string/settings_activity"
-            android:parentActivityName=".MainActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:parentActivityName=".ui.main.MainActivity">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.android.todolist;
+package com.example.android.todolist.settings;
 
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.android.todolist.R;
 import com.example.android.todolist.utilities.ReminderUtils;
 import com.example.android.todolist.utilities.NotificationUtils;
 

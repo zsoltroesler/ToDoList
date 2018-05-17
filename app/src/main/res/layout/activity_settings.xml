@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context="com.example.android.todolist.SettingsActivity">
+    tools:context="com.example.android.todolist.settings.SettingsActivity">
 
     <fragment
         android:id="@+id/activity_settings"
-        android:name="com.example.android.todolist.SettingsFragment"
+        android:name="com.example.android.todolist.settings.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

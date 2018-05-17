@@ -14,7 +14,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.example.android.todolist.MainActivity;
+import com.example.android.todolist.ui.main.MainActivity;
 import com.example.android.todolist.R;
 
 /**
@@ -44,7 +44,7 @@ public class NotificationUtils extends BroadcastReceiver {
         // Create an intent that opens up the MainActivity
         intent = new Intent(context, MainActivity.class);
 
-        // Create a pending intent, which holds our intent and be passed to NOtficationManager
+        // Create a pending intent, which holds our intent and be passed to NotificationManager
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
                 TODO_REMINDER_PENDING_INTENT_ID,

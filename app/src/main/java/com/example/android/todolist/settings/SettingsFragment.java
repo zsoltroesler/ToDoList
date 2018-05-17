@@ -1,4 +1,4 @@
-package com.example.android.todolist;
+package com.example.android.todolist.settings;
 
 /**
  * Created by Zsolt on 02.02.2018.
@@ -10,6 +10,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+
+import com.example.android.todolist.R;
 
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
@@ -25,6 +27,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference notification = findPreference(getString(R.string.pref_key_notification));
         bindPreferenceSummaryToValueBoolean(notification);
     }
+
 
     // onPreferenceChange() method is invoked with the key of the preference that was changed
     // in oder to save changes.
