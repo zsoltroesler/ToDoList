@@ -18,11 +18,15 @@ package com.example.android.todolist.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.LinearLayout;
 import com.example.android.todolist.AppExecutors;
 import com.example.android.todolist.R;
 import com.example.android.todolist.adapter.TaskAdapter;
@@ -42,6 +46,7 @@ import com.example.android.todolist.database.AppDatabase;
 import com.example.android.todolist.database.TaskEntry;
 import com.example.android.todolist.settings.SettingsActivity;
 import com.example.android.todolist.ui.add.AddTaskActivity;
+import com.example.android.todolist.utilities.SwipeToDeleteCallback;
 
 import java.util.List;
 
@@ -50,12 +55,17 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemClickListener {
 
-    // Constant for logging
     private static final String TAG = MainActivity.class.getSimpleName();
-    // Member variables for the adapter and RecyclerView
+
+    private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mRecyclerView;
+    private LinearLayout mLinearLayout;
+    private FloatingActionButton mFab;
     private TaskAdapter mAdapter;
     private AppDatabase mDb;
+    private List<TaskEntry> mTasks;
+    private TaskEntry mTask;
+    private int recentlyDeletedTaskPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,54 +74,48 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
 
         Log.i(TAG, "TEST: MainActivity onCreate() called");
 
-        // Set the RecyclerView to its corresponding view
+        mDb = AppDatabase.getsInstance(getApplicationContext());
+
+        setUpViews();
+
+        setupViewModel();
+
+    }
+
+    private void setupViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getTasks().observe(this, new Observer<List<TaskEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<TaskEntry> taskEntries) {
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                mTasks = taskEntries;
+                mAdapter.setTasks(mTasks);
+                if (mTasks == null || mTasks.isEmpty()) {
+                    mLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mLinearLayout.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private void setUpViews() {
+        mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
+        mFab = findViewById(R.id.fab);
+        mLinearLayout = findViewById(R.id.empty_list);
         mRecyclerView = findViewById(R.id.recyclerViewTasks);
 
-        // Set the layout for the RecyclerView to be a linear layout, which measures and
-        // positions items within a RecyclerView into a linear list
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize the adapter and attach it to the RecyclerView
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TaskAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
 
-        /*
-         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
-         An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
-         and uses callbacks to signal when a user is performing these actions.
-         */
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
+        swipeToDelete();
 
-            // Called when a user swipes left or right on a ViewHolder
-            @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Here is where you'll implement swipe to delete
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        int position = viewHolder.getAdapterPosition();
-                        List<TaskEntry> tasks = mAdapter.getTasks();
-                        mDb.taskDao().deleteTask(tasks.get(position));
-                    }
-                });
-            }
-        }).attachToRecyclerView(mRecyclerView);
-
-        /*
-         Set the Floating Action Button (FAB) to its corresponding View.
-         Attach an OnClickListener to it, so that when it's clicked, a new intent will be created
-         to launch the AddTaskActivity.
-         */
-        FloatingActionButton fabButton = findViewById(R.id.fab);
-
-        fabButton.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create a new intent to start an AddTaskActivity
@@ -119,19 +123,57 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
                 startActivity(addTaskIntent);
             }
         });
-        mDb = AppDatabase.getsInstance(getApplicationContext());
-        setupViewModel();
     }
 
-    private void setupViewModel() {
-       MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getTasks().observe(this, new Observer<List<TaskEntry>>() {
+    private void swipeToDelete() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
             @Override
-            public void onChanged(@Nullable List<TaskEntry> taskEntries) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
-                mAdapter.setTasks(taskEntries);
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // With swiping the QR code removed from the list but not deleted from the db yet
+                int position = viewHolder.getAdapterPosition();
+                mTasks = mAdapter.getTasks();
+                mTask = mTasks.get(position);
+                recentlyDeletedTaskPosition = position;
+                mTasks.remove(position);
+                mAdapter.notifyItemRemoved(recentlyDeletedTaskPosition);
+                showUndoSnackbar();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    private void showUndoSnackbar() {
+        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.delete_snackbar, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.delete_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Item would be restored into the list by pressing "UNDO"
+                undoDelete();
+            }
+        }).addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                // Item will ultimately be deleted from db
+                if (event != DISMISS_EVENT_ACTION) {
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDb.taskDao().deleteTask(mTask);
+                        }
+                    });
+                }
             }
         });
+        snackbar.setActionTextColor(Color.parseColor("#609BBC"));
+        snackbar.show();
+    }
+
+    private void undoDelete() {
+        mTasks.add(recentlyDeletedTaskPosition, mTask);
+        mAdapter.notifyItemInserted(recentlyDeletedTaskPosition);
     }
 
     @Override
@@ -155,11 +197,45 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
-            startActivity(startSettingsActivity);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
+                break;
+            case R.id.action_delete:
+                showDeleteConfirmationDialog();
+                break;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_confirmation_msg);
+        builder.setPositiveButton(R.string.delete_yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (mTasks == null || mTasks.isEmpty()) {
+                    dialog.dismiss();
+                } else {
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDb.taskDao().deleteAllTasks();
+                        }
+                    });
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.delete_no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

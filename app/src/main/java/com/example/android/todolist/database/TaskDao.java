@@ -28,6 +28,9 @@ public interface TaskDao {
     @Delete
     void deleteTask(TaskEntry taskEntry);
 
+    @Query("DELETE FROM task")
+    void deleteAllTasks();
+
     @Query("SELECT * FROM task WHERE id = :id")
     LiveData<TaskEntry> loadTaskById(int id);
 }

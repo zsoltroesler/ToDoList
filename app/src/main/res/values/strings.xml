@@ -51,4 +51,12 @@
     <string name="pref_label_notification">Reminder Notification</string>
     <string name="pref_key_notification" translatable="false">notification</string>
 
+    <string name="delete">delete</string>
+    <string name="delete_snackbar">Item deleted</string>
+    <string name="delete_undo">UNDO</string>
+    <string name="delete_confirmation_msg">Would you really like to delete all items?</string>
+    <string name="delete_yes">Yes</string>
+    <string name="delete_no">No</string>
+    <string name="your_list_is_empty">Your list is empty.</string>
+
 </resources>
