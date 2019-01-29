@@ -40,9 +40,13 @@ dependencies {
     // FAB dependencies
     implementation 'com.android.support:design:28.0.0'
 
-    //Testing
+    // Testing
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+
+    // Butterknife library for field and method binding
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

@@ -33,6 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * This TaskAdapter creates and binds ViewHolders, that hold the description and priority of a task,
@@ -155,12 +158,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         void onItemClickListener(int itemId);
     }
 
-    // Inner class for creating ViewHolders
     class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // Class variables for the task description and priority TextViews
+        @BindView(R.id.taskDescription)
         TextView taskDescriptionView;
+        @BindView(R.id.taskUpdatedAt)
         TextView updatedAtView;
+        @BindView(R.id.priorityTextView)
         TextView priorityView;
 
         /**
@@ -170,10 +174,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
          */
         public TaskViewHolder(View itemView) {
             super(itemView);
-
-            taskDescriptionView = itemView.findViewById(R.id.taskDescription);
-            updatedAtView = itemView.findViewById(R.id.taskUpdatedAt);
-            priorityView = itemView.findViewById(R.id.priorityTextView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

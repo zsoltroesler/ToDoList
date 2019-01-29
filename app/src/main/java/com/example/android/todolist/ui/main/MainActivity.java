@@ -50,6 +50,10 @@ import com.example.android.todolist.utilities.SwipeToDeleteCallback;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static android.widget.LinearLayout.VERTICAL;
 
 
@@ -57,10 +61,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private CoordinatorLayout mCoordinatorLayout;
-    private RecyclerView mRecyclerView;
-    private LinearLayout mLinearLayout;
-    private FloatingActionButton mFab;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.recyclerViewTasks)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.empty_list)
+    LinearLayout mLinearLayout;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+
     private TaskAdapter mAdapter;
     private AppDatabase mDb;
     private List<TaskEntry> mTasks;
@@ -71,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.i(TAG, "TEST: MainActivity onCreate() called");
 
         mDb = AppDatabase.getsInstance(getApplicationContext());
 
@@ -100,11 +107,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     }
 
     private void setUpViews() {
-        mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
-        mFab = findViewById(R.id.fab);
-        mLinearLayout = findViewById(R.id.empty_list);
-        mRecyclerView = findViewById(R.id.recyclerViewTasks);
-
+        ButterKnife.bind(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TaskAdapter(this, this);
@@ -114,15 +117,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
         mRecyclerView.addItemDecoration(decoration);
 
         swipeToDelete();
+    }
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Create a new intent to start an AddTaskActivity
-                Intent addTaskIntent = new Intent(MainActivity.this, AddTaskActivity.class);
-                startActivity(addTaskIntent);
-            }
-        });
+    @OnClick(R.id.fab)
+    public void startAddActivity() {
+        Intent addTaskIntent = new Intent(MainActivity.this, AddTaskActivity.class);
+        startActivity(addTaskIntent);
     }
 
     private void swipeToDelete() {
@@ -184,9 +184,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
         startActivity(intent);
     }
 
-    /**
-     * Methods for setting up the menu
-     **/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

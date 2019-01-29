@@ -19,16 +19,23 @@ import com.example.android.todolist.utilities.NotificationUtils;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private LinearLayout ll;
-
-    private TextView tv;
+    @BindView(R.id.ll_set_time)
+    LinearLayout ll;
+    @BindView(R.id.tv_display_time)
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        ButterKnife.bind(this);
+
         ActionBar actionBar = this.getSupportActionBar();
 
         // Set the action bar back button to look like an up button
@@ -36,16 +43,13 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ll = findViewById(R.id.ll_set_time);
-        tv = findViewById(R.id.tv_display_time);
-
         showNotificationScheduler();
     }
 
     // This method allows the user to set reminder notification on UI for the future or not
     private void showNotificationScheduler() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // Register the listener
+
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         boolean notification = sharedPreferences.getBoolean(getString(R.string.pref_key_notification), getResources().getBoolean(R.bool.notification_by_default));
@@ -93,7 +97,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Unregister SettingsActivity as an OnPreferenceChangedListener to avoid any memory leaks.
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
     }

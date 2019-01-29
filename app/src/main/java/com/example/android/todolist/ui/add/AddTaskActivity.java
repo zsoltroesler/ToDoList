@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -35,6 +34,10 @@ import com.example.android.todolist.database.AppDatabase;
 import com.example.android.todolist.database.TaskEntry;
 
 import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -51,13 +54,15 @@ public class AddTaskActivity extends AppCompatActivity {
     private static final int DEFAULT_TASK_ID = -1;
     // Constant for logging
     private static final String TAG = AddTaskActivity.class.getSimpleName();
-    // Fields for views
+
+    @BindView(R.id.editTextTaskDescription)
     EditText mEditText;
+    @BindView(R.id.radioGroup)
     RadioGroup mRadioGroup;
+    @BindView(R.id.saveButton)
     Button mButton;
 
     private int mTaskId = DEFAULT_TASK_ID;
-
     // Member variable for the Database
     private AppDatabase mDb;
 
@@ -65,7 +70,7 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        initViews();
+        ButterKnife.bind(this);
 
         mDb = AppDatabase.getsInstance(getApplicationContext());
 
@@ -102,22 +107,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     /**
-     * initViews is called from onCreate to init the member variable views
-     */
-    private void initViews() {
-        mEditText = findViewById(R.id.editTextTaskDescription);
-        mRadioGroup = findViewById(R.id.radioGroup);
-
-        mButton = findViewById(R.id.saveButton);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSaveButtonClicked();
-            }
-        });
-    }
-
-    /**
      * populateUI would be called to populate the UI when in update mode
      *
      * @param task the taskEntry to populate the UI
@@ -130,10 +119,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setPriorityInViews(task.getPriority());
     }
 
-    /**
-     * onSaveButtonClicked is called when the "save" button is clicked.
-     * It retrieves user input and inserts that new task data into the underlying database.
-     */
+    @OnClick(R.id.saveButton)
     public void onSaveButtonClicked() {
         String description = mEditText.getText().toString();
         int priority = getPriorityFromViews();
