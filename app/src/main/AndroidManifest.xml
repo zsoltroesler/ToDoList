@@ -14,14 +14,18 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- The manifest entry for the MainActivity -->
-        <activity android:name=".ui.main.MainActivity">
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- The manifest entry for the MainActivity -->
+        <activity android:name=".ui.main.MainActivity"/>
 
         <!-- AddTaskActivity -->
         <activity
