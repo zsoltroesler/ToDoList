@@ -5,4 +5,4 @@ with TimePickerDialog by the user. UPDATE: SQLite database and ContentProvider r
 
 Tags: Android Architecture Components (Room, LiveData, ViewModel, Lifecycle), RecyclerView, SharedPreferences, Notification, AlarmManager, TimePickerDialog
 
-![to-do list](https://user-images.githubusercontent.com/23049871/35885278-a6072a50-0b8d-11e8-8a04-0ccda93cf758.gif)
+<img src="https://user-images.githubusercontent.com/23049871/52651022-b62b6400-2eeb-11e9-880a-248f4c39e0e6.gif" width="300" height="534"/>
