@@ -16,8 +16,11 @@
 
 package com.example.android.todolist.ui.main;
 
+import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +34,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import android.util.Log;
@@ -39,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.example.android.todolist.AppExecutors;
 import com.example.android.todolist.R;
 import com.example.android.todolist.adapter.TaskAdapter;
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     @BindView(R.id.fab)
     FloatingActionButton mFab;
 
+    private SearchView searchView;
     private TaskAdapter mAdapter;
     private AppDatabase mDb;
     private List<TaskEntry> mTasks;
@@ -188,8 +194,46 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.todolist_menu, menu);
-        return true;
+
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(onQueryTextListener);
+
+        return super.onCreateOptionsMenu(menu);
     }
+
+    private SearchView.OnQueryTextListener onQueryTextListener =
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    getTasksFromDb(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    getTasksFromDb(newText);
+                    return true;
+                }
+
+                private void getTasksFromDb(String searchText) {
+                    searchText = "%" + searchText + "%";
+                    MainViewModel viewModel = ViewModelProviders.of(MainActivity.this).get(MainViewModel.class);
+                    viewModel.getTasksByQuery(searchText).observe(MainActivity.this, new Observer<List<TaskEntry>>() {
+                        @Override
+                        public void onChanged(@Nullable List<TaskEntry> taskEntries) {
+                            Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                            if (taskEntries == null) {
+                                return;
+                            }
+                            mTasks = taskEntries;
+                            mAdapter.setTasks(mTasks);
+                        }
+                    });
+                }
+            };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -202,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
                 break;
+
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,5 +1,6 @@
 package com.example.android.todolist.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.net.ContentHandler;
+import java.util.List;
 
 @Database(entities = {TaskEntry.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
@@ -33,4 +35,12 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract TaskDao taskDao();
+
+    public TaskDao getTaskDAO(Context context){
+        return getsInstance(context).taskDao();
+    }
+
+    public LiveData<List<TaskEntry>> getTasksListInfo(Context context, String query){
+        return getTaskDAO(context).getTaskList(query);
+    }
 }

@@ -33,4 +33,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task WHERE id = :id")
     LiveData<TaskEntry> loadTaskById(int id);
+
+    @Query("SELECT * FROM task WHERE description like :taskText")
+    LiveData<List<TaskEntry>> getTaskList(String taskText);
 }

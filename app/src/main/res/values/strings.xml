@@ -58,5 +58,6 @@
     <string name="delete_yes">Yes</string>
     <string name="delete_no">No</string>
     <string name="your_list_is_empty">Your list is empty.</string>
+    <string name="action_search">Search for task</string>
 
 </resources>

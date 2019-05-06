@@ -24,6 +24,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private ResourceProvider resourceProvider = new ResourceProvider(getApplication());
 
+    private AppDatabase database;
+
     public MainViewModel(@NonNull Application application) {
         super(application);
 
@@ -31,7 +33,7 @@ public class MainViewModel extends AndroidViewModel {
         String orderBy = sharedPrefs.getString(resourceProvider.getString(R.string.pref_key_order),
                 resourceProvider.getString(R.string.pref_default_order));
 
-        AppDatabase database = AppDatabase.getsInstance(this.getApplication());
+        database = AppDatabase.getsInstance(this.getApplication());
 
         if (orderBy.equals(resourceProvider.getString(R.string.pref_value_chronological))) {
             tasks = database.taskDao().loadAllTasksByDate();
@@ -44,5 +46,9 @@ public class MainViewModel extends AndroidViewModel {
         return tasks;
     }
 
+    public LiveData <List<TaskEntry>> getTasksByQuery(String query) {
+        tasks = database.taskDao().getTaskList(query);
+        return tasks;
+    }
 
 }
