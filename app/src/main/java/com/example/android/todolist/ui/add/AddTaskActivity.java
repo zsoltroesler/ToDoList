@@ -81,6 +81,9 @@ public class AddTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_TASK_ID)) {
             mButton.setText(R.string.update_button);
+
+            getSupportActionBar().setTitle(R.string.update_task_activity_name);
+
             if (mTaskId == DEFAULT_TASK_ID) {
                 // populate the UI
                 mTaskId = intent.getIntExtra(EXTRA_TASK_ID, DEFAULT_TASK_ID);

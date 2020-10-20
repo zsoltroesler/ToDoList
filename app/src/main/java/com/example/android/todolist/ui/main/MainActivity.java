@@ -16,11 +16,8 @@
 
 package com.example.android.todolist.ui.main;
 
-import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
     @BindView(R.id.fab)
     FloatingActionButton mFab;
 
-    private SearchView searchView;
     private TaskAdapter mAdapter;
     private AppDatabase mDb;
     private List<TaskEntry> mTasks;
@@ -135,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // With swiping the QR code removed from the list but not deleted from the db yet
+                // With swiping the task removed from the list but not deleted from the db yet
                 int position = viewHolder.getAdapterPosition();
                 mTasks = mAdapter.getTasks();
                 mTask = mTasks.get(position);
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.todolist_menu, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.action_search)
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
 
         searchView.setSubmitButtonEnabled(true);

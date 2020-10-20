@@ -2,7 +2,7 @@
 <resources>
     <!-- colors for general appearance -->
     <color name="colorPrimary">#9BB2C0</color>
-    <color name="colorPrimaryDark">#407376</color>
+    <color name="colorPrimaryDark">#7F919C</color>
     <color name="colorPrimaryLight">#A5A5A5</color>
     <color name="colorAccent">#E67E22</color>
 
